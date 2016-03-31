@@ -3,7 +3,7 @@ SET( BUILD_SHARED_LIBS ON )
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/../sound/oggVorbis )
 add_definitions( -DGAME_DLL -D__WITH_PB__ )
 
-SET(    GAME_CPP
+SET( GAME_CPP
 	AF.cpp
 	Game_network.cpp
 	PlayerView.cpp
@@ -114,8 +114,17 @@ SET( SOURCES
 	${GAME_HDR}
 )
 
+IF(WIN32)
+SET( LIB_OPTIONS
+    game.def
+)
+ENDIF()
+
 ADD_DEFINITIONS( ${CPP_WARNING_OPTIONS} )
-add_library( game ${SOURCES} )
+add_library( game ${SOURCES} ${LIB_OPTIONS} )
 target_link_libraries( game idlib )
 set_target_properties( game PROPERTIES PREFIX "")
+IF(WIN32)
+SET_TARGET_PROPERTIES( game PROPERTIES OUTPUT_NAME "gamex86" )
+ENDIF()
 
