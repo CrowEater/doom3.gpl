@@ -82,8 +82,18 @@ SET( SOURCES
 	${D3XP_HDR}
 )
 
+IF(WIN32)
+SET( LIB_OPTIONS
+    game.def
+)
+ENDIF()
+
 ADD_DEFINITIONS( ${CPP_WARNING_OPTIONS} )
 ADD_LIBRARY( d3xp ${SOURCES} )
 target_link_libraries( d3xp idlib )
 set_target_properties( d3xp PROPERTIES PREFIX "")
+
+IF(WIN32)
+SET_TARGET_PROPERTIES( d3xp PROPERTIES OUTPUT_NAME "d3xp86" )
+ENDIF()
 

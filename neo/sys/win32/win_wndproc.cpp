@@ -282,6 +282,8 @@ LONG WINAPI MainWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam ) {
 				if (::GetClientRect(win32.hWnd, &rect)) {
 					glConfig.vidWidth = rect.right - rect.left;
 					glConfig.vidHeight = rect.bottom - rect.top;
+					glConfig.winWidth = glConfig.vidWidth;
+					glConfig.winHeight = glConfig.vidHeight;
 				}
 			}
 			break;
