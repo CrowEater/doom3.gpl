@@ -273,7 +273,7 @@ idEvent *idEvent::Alloc( const idEventDef *evdef, int numargs, va_list args ) {
 		arg = va_arg( args, idEventArg * );
 		if ( format[ i ] != arg->type ) {
 			// when NULL is passed in for an entity, it gets cast as an integer 0, so don't give an error when it happens
-			if ( !( ( ( format[ i ] == D_EVENT_TRACE ) || ( format[ i ] == D_EVENT_ENTITY ) ) && ( arg->type == 'd' ) && ( arg->value == 0 ) ) ) {
+			if (!(((format[i] == D_EVENT_TRACE) || (format[i] == D_EVENT_ENTITY)) && (arg->type == D_EVENT_INTEGER) && (arg->value.inttype == 0))) {
 				gameLocal.Error( "idEvent::Alloc : Wrong type passed in for arg # %d on '%s' event.", i, evdef->GetName() );
 			}
 		}
@@ -283,37 +283,37 @@ idEvent *idEvent::Alloc( const idEventDef *evdef, int numargs, va_list args ) {
 		switch( format[ i ] ) {
 		case D_EVENT_FLOAT :
 		case D_EVENT_INTEGER :
-			*reinterpret_cast<int *>( dataPtr ) = arg->value;
+			*reinterpret_cast<int *>(dataPtr) = arg->value.inttype;
 			break;
 
 		case D_EVENT_VECTOR :
-			if ( arg->value ) {
-				*reinterpret_cast<idVec3 *>( dataPtr ) = *reinterpret_cast<const idVec3 *>( arg->value );
+			if (arg->value.vectype) {
+				*reinterpret_cast<idVec3 *>(dataPtr) = *arg->value.vectype;
 			}
 			break;
 
 		case D_EVENT_STRING :
-			if ( arg->value ) {
-				idStr::Copynz( reinterpret_cast<char *>( dataPtr ), reinterpret_cast<const char *>( arg->value ), MAX_STRING_LEN );
+			if (arg->value.strtype) {
+				idStr::Copynz(reinterpret_cast<char *>(dataPtr), arg->value.strtype, MAX_STRING_LEN);
 			}
 			break;
 
 		case D_EVENT_ENTITY :
 		case D_EVENT_ENTITY_NULL :
-			*reinterpret_cast< idEntityPtr<idEntity> * >( dataPtr ) = reinterpret_cast<idEntity *>( arg->value );
+			*reinterpret_cast<idEntityPtr<const idEntity> *>(dataPtr) = arg->value.entitytype;
 			break;
 
 		case D_EVENT_TRACE :
-			if ( arg->value ) {
-				*reinterpret_cast<bool *>( dataPtr ) = true;
-				*reinterpret_cast<trace_t *>( dataPtr + sizeof( bool ) ) = *reinterpret_cast<const trace_t *>( arg->value );
+			if (arg->value.tracetype) {
+				*reinterpret_cast<bool *>(dataPtr) = true;
+				*reinterpret_cast<trace_t *>(dataPtr + sizeof(bool)) = *arg->value.tracetype;
 
 				// save off the material as a string since the pointer won't be valid in save games.
 				// since we save off the entire trace_t structure, if the material is NULL here,
 				// it will be NULL when we process it, so we don't need to save off anything in that case.
-				if ( reinterpret_cast<const trace_t *>( arg->value )->c.material ) {
-					materialName = reinterpret_cast<const trace_t *>( arg->value )->c.material->GetName();
-					idStr::Copynz( reinterpret_cast<char *>( dataPtr + sizeof( bool ) + sizeof( trace_t ) ), materialName, MAX_STRING_LEN );
+				if (arg->value.tracetype->c.material) {
+					materialName = arg->value.tracetype->c.material->GetName();
+					idStr::Copynz(reinterpret_cast<char *>(dataPtr + sizeof(bool) + sizeof(trace_t)), materialName, MAX_STRING_LEN);
 				}
 			} else {
 				*reinterpret_cast<bool *>( dataPtr ) = false;
@@ -348,12 +348,12 @@ void idEvent::CopyArgs( const idEventDef *evdef, int numargs, va_list args, int 
 		arg = va_arg( args, idEventArg * );
 		if ( format[ i ] != arg->type ) {
 			// when NULL is passed in for an entity, it gets cast as an integer 0, so don't give an error when it happens
-			if ( !( ( ( format[ i ] == D_EVENT_TRACE ) || ( format[ i ] == D_EVENT_ENTITY ) ) && ( arg->type == 'd' ) && ( arg->value == 0 ) ) ) {
+			if ( !( ( ( format[ i ] == D_EVENT_TRACE ) || ( format[ i ] == D_EVENT_ENTITY ) ) && ( arg->type == D_EVENT_INTEGER ) && ( arg->value.inttype == 0 ) ) ) {
 				gameLocal.Error( "idEvent::CopyArgs : Wrong type passed in for arg # %d on '%s' event.", i, evdef->GetName() );
 			}
 		}
 
-		data[ i ] = arg->value;
+		data[ i ] = arg->value.inttype;
 	}
 }
 

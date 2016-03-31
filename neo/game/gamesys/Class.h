@@ -68,14 +68,14 @@ public:
 	int			type;
 	idEventType	value;
 
-	idEventArg()								{ type = D_EVENT_INTEGER; value.inttype = 0; };
-	idEventArg(int data)						{ type = D_EVENT_INTEGER; value.inttype = data; };
-	idEventArg( float data )					{ type = D_EVENT_FLOAT; value.floattype = data; };
-	idEventArg( idVec3 &data )					{ type = D_EVENT_VECTOR; value.vectype = &data; };
-	idEventArg( const idStr &data )				{ type = D_EVENT_STRING; value.strtype = data.c_str(); };
-	idEventArg( const char *data )				{ type = D_EVENT_STRING; value.strtype = data; };
-	idEventArg( const class idEntity *data )	{ type = D_EVENT_ENTITY; value.entitytype = data; };
-	idEventArg( const struct trace_s *data )	{ type = D_EVENT_TRACE; value.tracetype = data; };
+	idEventArg()                            { type = D_EVENT_INTEGER; value.inttype = 0; };
+	idEventArg(int data)                    { type = D_EVENT_INTEGER; value.inttype = data; };
+	idEventArg(float data)                  { type = D_EVENT_FLOAT; value.floattype = data; };
+	idEventArg(idVec3 &data)                { type = D_EVENT_VECTOR; value.vectype = &data; };
+	idEventArg(const idStr &data)           { type = D_EVENT_STRING; value.strtype = data.c_str(); };
+	idEventArg(const char *data)            { type = D_EVENT_STRING; value.strtype = data; };
+	idEventArg(const class idEntity *data)  { type = D_EVENT_ENTITY; value.entitytype = data; };
+	idEventArg(const struct trace_s *data)  { type = D_EVENT_TRACE; value.tracetype = data; };
 };
 
 class idAllocError : public idException {
