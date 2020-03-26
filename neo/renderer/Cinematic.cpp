@@ -54,7 +54,7 @@ public:
 	virtual void			ResetTime(int time);
 
 private:
-	unsigned int			mcomp[256];
+	int						mcomp[256];
 	byte **					qStatus[2];
 	idStr					fileName;
 	int						CIN_WIDTH, CIN_HEIGHT;
@@ -1243,8 +1243,8 @@ void idCinematicLocal::readQuadInfo( byte *qData ) {
 	half = false;
 	smootheddouble = false;
 	
-	t[0] = (0 - (unsigned int)image)+(unsigned int)image+screenDelta;
-	t[1] = (0 - ((unsigned int)image + screenDelta))+(unsigned int)image;
+	t[0] = (0 - (intptr_t)image)+(intptr_t)image+screenDelta;
+	t[1] = (0 - ((intptr_t)image + screenDelta))+(intptr_t)image;
 
 	drawX = CIN_WIDTH;
 	drawY = CIN_HEIGHT;

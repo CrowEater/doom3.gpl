@@ -65,17 +65,18 @@ If you have questions concerning this license or the applicable additional terms
 #define	ANGLE2BYTE(x)			( idMath::FtoiFast( (x) * 256.0f / 360.0f ) & 255 )
 #define	BYTE2ANGLE(x)			( (x) * ( 360.0f / 256.0f ) )
 
-#define FLOATSIGNBITSET(f)		((*(const unsigned long *)&(f)) >> 31)
-#define FLOATSIGNBITNOTSET(f)	((~(*(const unsigned long *)&(f))) >> 31)
-#define FLOATNOTZERO(f)			((*(const unsigned long *)&(f)) & ~(1<<31) )
-#define INTSIGNBITSET(i)		(((const unsigned long)(i)) >> 31)
-#define INTSIGNBITNOTSET(i)		((~((const unsigned long)(i))) >> 31)
+// I suppose we're not worried about aliasing
+#define FLOATSIGNBITSET(f)		((*(const dword *)&(f)) >> 31)
+#define FLOATSIGNBITNOTSET(f)	((~(*(const dword *)&(f))) >> 31)
+#define FLOATNOTZERO(f)			((*(const dword *)&(f)) & ~(1<<31) )
+#define INTSIGNBITSET(i)		(((const dword)(i)) >> 31)
+#define INTSIGNBITNOTSET(i)		((~((const dword)(i))) >> 31)
 
-#define	FLOAT_IS_NAN(x)			(((*(const unsigned long *)&x) & 0x7f800000) == 0x7f800000)
-#define FLOAT_IS_INF(x)			(((*(const unsigned long *)&x) & 0x7fffffff) == 0x7f800000)
-#define FLOAT_IS_IND(x)			((*(const unsigned long *)&x) == 0xffc00000)
-#define	FLOAT_IS_DENORMAL(x)	(((*(const unsigned long *)&x) & 0x7f800000) == 0x00000000 && \
-								 ((*(const unsigned long *)&x) & 0x007fffff) != 0x00000000 )
+#define	FLOAT_IS_NAN(x)			(((*(const dword *)&x) & 0x7f800000) == 0x7f800000)
+#define FLOAT_IS_INF(x)			(((*(const dword *)&x) & 0x7fffffff) == 0x7f800000)
+#define FLOAT_IS_IND(x)			((*(const dword *)&x) == 0xffc00000)
+#define	FLOAT_IS_DENORMAL(x)	(((*(const dword *)&x) & 0x7f800000) == 0x00000000 && \
+								 ((*(const dword *)&x) & 0x007fffff) != 0x00000000 )
 
 #define IEEE_FLT_MANTISSA_BITS	23
 #define IEEE_FLT_EXPONENT_BITS	8

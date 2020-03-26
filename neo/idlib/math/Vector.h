@@ -1494,7 +1494,7 @@ private:
 	int				alloced;				// if -1 p points to data set with SetData
 	float *			p;						// memory the vector is stored
 
-	static float	temp[VECX_MAX_TEMP+4];	// used to store intermediate results
+	static float	temp[VECX_MAX_TEMP+15];	// used to store intermediate results
 	static float *	tempPtr;				// pointer to 16 byte aligned temporary memory
 	static int		tempIndex;				// index into memory pool, wraps around
 

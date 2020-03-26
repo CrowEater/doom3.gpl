@@ -30,7 +30,7 @@ If you have questions concerning this license or the applicable additional terms
 #define __SCRIPT_INTERPRETER_H__
 
 #define MAX_STACK_DEPTH 	64
-#define LOCALSTACK_SIZE 	6144
+#define LOCALSTACK_SIZE 	(1536*sizeof(intptr_t))
 
 typedef struct prstack_s {
 	int 				s;
@@ -60,7 +60,7 @@ private:
 
 	void				PopParms( int numParms );
 	void				PushString( const char *string );
-	void				Push( int value );
+	void				Push( intptr_t value );
 	const char			*FloatToString( float value );
 	void				AppendString( idVarDef *def, const char *from );
 	void				SetString( idVarDef *def, const char *from );
@@ -93,8 +93,8 @@ public:
 	int					CurrentLine( void ) const;
 	const char			*CurrentFile( void ) const;
 
-	void				Error( char *fmt, ... ) const id_attribute((format(printf,2,3)));
-	void				Warning( char *fmt, ... ) const id_attribute((format(printf,2,3)));
+	void				Error( const char *fmt, ... ) const id_attribute((format(printf,2,3)));
+	void				Warning( const char *fmt, ... ) const id_attribute((format(printf,2,3)));
 	void				DisplayInfo( void ) const;
 
 	bool				BeginMultiFrameEvent( idEntity *ent, const idEventDef *event );
@@ -135,12 +135,12 @@ ID_INLINE void idInterpreter::PopParms( int numParms ) {
 idInterpreter::Push
 ====================
 */
-ID_INLINE void idInterpreter::Push( int value ) {
+ID_INLINE void idInterpreter::Push( intptr_t value ) {
 	if ( localstackUsed + sizeof( int ) > LOCALSTACK_SIZE ) {
 		Error( "Push: locals stack overflow\n" );
 	}
 	*( int * )&localstack[ localstackUsed ]	= value;
-	localstackUsed += sizeof( int );
+	localstackUsed += sizeof( intptr_t );
 }
 
 /*

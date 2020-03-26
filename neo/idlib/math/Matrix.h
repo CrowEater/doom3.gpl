@@ -1972,7 +1972,7 @@ private:
 	int				alloced;				// floats allocated, if -1 then mat points to data set with SetData
 	float *			mat;					// memory the matrix is stored
 
-	static float	temp[MATX_MAX_TEMP+4];	// used to store intermediate results
+	static float	temp[MATX_MAX_TEMP+15];	// used to store intermediate results
 	static float *	tempPtr;				// pointer to 16 byte aligned temporary memory
 	static int		tempIndex;				// index into memory pool, wraps around
 

@@ -15,6 +15,8 @@ void Platform_Quit();
 #include <stdio.h>
 #include <stdarg.h>
 
+static const int MAX_DLL = 16;
+
 int       g_Quit = 0;
 
 static SDL_mutex     *s_CritSect[MAX_CRITICAL_SECTIONS];
@@ -24,6 +26,7 @@ static SDL_mutex *s_EventCS;
 static SDL_cond	 *s_event_cond[ MAX_TRIGGER_EVENTS ];
 static bool       s_signaled[ MAX_TRIGGER_EVENTS ];
 static bool       s_waiting[ MAX_TRIGGER_EVENTS ];
+static void      *s_loadedDLL[ MAX_DLL ];
 
 void Sys_DebugPrintf( const char *fmt, ... )
 {
@@ -40,17 +43,27 @@ void Sys_Printf( const char *fmt, ... )
 
 int Sys_DLL_Load( const char *dllName )
 {
-	return (intptr_t)SDL_LoadObject( dllName );
+	for( int i = 0; i < MAX_DLL; ++i )
+	{
+		if( s_loadedDLL[i] == NULL )
+		{
+			s_loadedDLL[i] = SDL_LoadObject( dllName );
+			return i+1;
+
+		}
+	}
+	return 0;
 }
 
 void Sys_DLL_Unload( int dllHandle )
 {
-	SDL_UnloadObject( (void *)dllHandle );
+	assert( dllHandle >= 0 );
+	SDL_UnloadObject( s_loadedDLL[dllHandle-1] );
 }
 
 void *Sys_DLL_GetProcAddress( int dllHandle, const char *procName )
 {
-	return SDL_LoadFunction( (void *)dllHandle, procName );
+	return SDL_LoadFunction( s_loadedDLL[dllHandle-1], procName );
 }
 
 void Sys_Init( void )
@@ -230,7 +243,7 @@ cpuid_t Sys_GetProcessorId( void )
 {
 	// implemented
 	int cpuid = CPUID_GENERIC;
-#if defined(__i386__)
+#if defined(__x86_64__) || defined(__i386__)
 	cpuid |= CPUID_INTEL | CPUID_MMX | CPUID_SSE | CPUID_SSE2 | CPUID_SSE3 | CPUID_HTT | CPUID_CMOV | CPUID_FTZ | CPUID_DAZ;
 #else
 	#error "Unsupported Platform"
@@ -245,7 +258,7 @@ Sys_GetProcessorString
 */
 const char *Sys_GetProcessorString( void )
 {
-#if defined(__i386__)
+#if defined(__x86_64__) || defined(__i386__)
 	return "x86 CPU with MMX/SSE/SSE2/SSE3 extensions";
 #else
 	#error "Unsupported Platform"
@@ -278,6 +291,7 @@ void Sys_CreateThread(  xthread_t function, void *parms, xthreadPriority priorit
 	common->DPrintf("Sys_CreateThread %s : note priority etc not implemented\n", name);
 	SDL_Thread *thread = SDL_CreateThread( (SDL_ThreadFunction)function, name, parms );
 	info.name = name;
+	info.threadHandle = (intptr_t)thread;
 }
 
 void Sys_SetFatalError( const char *error )

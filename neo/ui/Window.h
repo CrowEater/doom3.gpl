@@ -106,7 +106,8 @@ typedef enum {
 
 typedef struct {
 	wexpOpType_t opType;	
-	int	a, b, c, d;
+	intptr_t a;
+	int b, c, d;
 } wexpOp_t;
 
 struct idRegEntry {
@@ -157,7 +158,7 @@ public:
 
 struct idTransitionData {
 	idWinVar *data;
-	int	offset;
+	intptr_t  offset;
 	idInterpolateAccelDecelLinear<idVec4> interp;
 };
 
@@ -230,7 +231,7 @@ public:
 
 	virtual idWinVar *GetWinVarByName	(const char *_name, bool winLookup = false, drawWin_t** owner = NULL);
 
-	int  GetWinVarOffset( idWinVar *wv, drawWin_t *dw );
+	intptr_t  GetWinVarOffset( idWinVar *wv, drawWin_t *dw );
 	float GetMaxCharHeight();
 	float GetMaxCharWidth();
 	void SetFont();
@@ -350,7 +351,7 @@ protected:
 
 	int ExpressionTemporary();
 	wexpOp_t *ExpressionOp();
-	int EmitOp( int a, int b, wexpOpType_t opType, wexpOp_t **opp = NULL );
+	int EmitOp( intptr_t a, int b, wexpOpType_t opType, wexpOp_t **opp = NULL );
 	int ParseEmitOp( idParser *src, int a, wexpOpType_t opType, int priority, wexpOp_t **opp = NULL );
 	int ParseTerm( idParser *src, idWinVar *var = NULL, int component = 0 );
 	int ParseExpressionPriority( idParser *src, int priority, idWinVar *var = NULL, int component = 0 );

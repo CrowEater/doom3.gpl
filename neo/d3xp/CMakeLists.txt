@@ -71,10 +71,14 @@ SET( D3XP_CPP
 	./physics/Physics_Static.cpp
 	./physics/Physics_StaticMulti.cpp
 	./physics/Push.cpp
-	./script/Script_Compiler.cpp
-	./script/Script_Interpreter.cpp
-	./script/Script_Program.cpp
-	./script/Script_Thread.cpp
+	script/Script_Compiler.cpp
+	script/Script_Compiler.h
+	script/Script_Interpreter.cpp
+	script/Script_Interpreter.h
+	script/Script_Program.cpp
+	script/Script_Program.h
+	script/Script_Thread.cpp
+	script/Script_Thread.h
 )
 
 SET( SOURCES
