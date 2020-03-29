@@ -646,6 +646,8 @@ void R_InitOpenGL( void ) {
 
 		if ( GLimp_Init( parms ) ) {
 			// it worked
+			glConfig.winWidth = glConfig.vidWidth;
+			glConfig.winHeight = glConfig.vidHeight;
 			break;
 		}
 

@@ -92,8 +92,8 @@ If you have questions concerning this license or the applicable additional terms
 //#define ID_DEMO_BUILD
 
 // don't define ID_ALLOW_TOOLS when we don't want tool code in the executable.
-#if defined( _WIN32 ) && !defined( ID_DEDICATED ) && !defined( ID_DEMO_BUILD )
-//	#define	ID_ALLOW_TOOLS
+#if defined( _WIN32 ) && !defined( ID_DEDICATED ) && !defined( ID_DEMO_BUILD ) && !defined( DOOM3_NO_TOOLS )
+	#define	ID_ALLOW_TOOLS
 #endif
 
 // don't do backtraces in release builds.
