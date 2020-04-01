@@ -157,7 +157,7 @@ void idStr::operator=( const char *text ) {
 	if ( text >= data && text <= data + len ) {
 		diff = text - data;
 
-		assert( strlen( text ) < (unsigned)len );
+		assert( strlen( text ) < len );
 
 		for ( i = 0; text[ i ]; i++ ) {
 			data[ i ] = text[ i ];

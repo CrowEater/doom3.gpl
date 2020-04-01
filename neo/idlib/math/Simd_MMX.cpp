@@ -39,7 +39,7 @@ If you have questions concerning this license or the applicable additional terms
 //
 //===============================================================
 
-#if defined(MACOS_X) && defined(__i386__)
+#if (defined(MACOS_X) && defined(__i386__)) || defined(_WIN64)
 /*
 ============
 idSIMD_MMX::GetName
@@ -49,7 +49,7 @@ const char * idSIMD_MMX::GetName( void ) const {
 	return "MMX";
 }
 
-#elif defined(_WIN32)
+#elif defined(_WIN32) && !defined(_WIN64)
 
 #define EMMS_INSTRUCTION		__asm emms
 

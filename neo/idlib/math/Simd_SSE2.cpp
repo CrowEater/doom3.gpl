@@ -40,7 +40,7 @@ If you have questions concerning this license or the applicable additional terms
 //	SSE2 implementation of idSIMDProcessor
 //
 //===============================================================
-#if defined(MACOS_X) && defined(__i386__)
+#if defined(MACOS_X) && defined(__i386__) || defined(_WIN64)
 
 #include <xmmintrin.h>
 
@@ -76,7 +76,7 @@ void VPCALL idSIMD_SSE2::CmpLT( byte *dst, const byte bitNum, const float *src0,
 	int dst_l;
 	
 	/* if the float array is not aligned on a 4 byte boundary */
-	if ( ((int) src0) & 3 ) {
+	if ( ((intptr_t) src0) & 3 ) {
 		/* unaligned memory access */
 		pre = 0;
 		cnt = count >> 2;
@@ -134,7 +134,7 @@ void VPCALL idSIMD_SSE2::CmpLT( byte *dst, const byte bitNum, const float *src0,
 				_mm_prefetch(src0_p+128, _MM_HINT_NTA);
 				xmm0 = _mm_cmplt_ps(xmm0, xmm1);
 				// Simplify using SSE2
-				xmm0i = (__m128i) xmm0;
+				xmm0i = _mm_castps_si128(xmm0);
 				xmm0i = _mm_packs_epi32(xmm0i, xmm0i);
 				xmm0i = _mm_packs_epi16(xmm0i, xmm0i);
 				mask_l = _mm_cvtsi128_si32(xmm0i);
@@ -152,8 +152,8 @@ void VPCALL idSIMD_SSE2::CmpLT( byte *dst, const byte bitNum, const float *src0,
 	}																					
 	else {																				
 		/* aligned memory access */														
-		aligned = (float *) ((((int) src0) + 15) & ~15);								
-		if ( (int)aligned > ((int)src0) + count ) {										
+		aligned = (float *) ((((intptr_t) src0) + 15) & ~15);								
+		if ( (intptr_t)aligned > ((intptr_t)src0) + count ) {										
 			pre = count;																
 			post = 0;																	
 		}																				
@@ -215,7 +215,7 @@ void VPCALL idSIMD_SSE2::CmpLT( byte *dst, const byte bitNum, const float *src0,
 					_mm_prefetch(src0_p+128, _MM_HINT_NTA);
 					xmm0 = _mm_cmplt_ps(xmm0, xmm1);
 					// Simplify using SSE2
-					xmm0i = (__m128i) xmm0;
+					xmm0i = _mm_castps_si128(xmm0);
 					xmm0i = _mm_packs_epi32(xmm0i, xmm0i);
 					xmm0i = _mm_packs_epi16(xmm0i, xmm0i);
 					mask_l = _mm_cvtsi128_si32(xmm0i);

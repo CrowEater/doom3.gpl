@@ -42,6 +42,11 @@ If you have questions concerning this license or the applicable additional terms
 #define strcmp			idStr::Cmp		// use_idStr_Cmp
 #define strncmp			use_idStr_Cmpn
 
+#if defined strlen
+#undef strlen
+#endif
+#define strlen          idStr::Length
+
 #if defined( StrCmpN )
 #undef StrCmpN
 #endif

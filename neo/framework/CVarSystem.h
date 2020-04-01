@@ -29,6 +29,7 @@ If you have questions concerning this license or the applicable additional terms
 #ifndef __CVARSYSTEM_H__
 #define __CVARSYSTEM_H__
 
+#include <stdint.h>
 /*
 ===============================================================================
 
@@ -289,7 +290,7 @@ ID_INLINE void idCVar::Init( const char *name, const char *value, int flags, con
 	this->integerValue = 0;
 	this->floatValue = 0.0f;
 	this->internalVar = this;
-	if ( staticVars != (idCVar *)0xFFFFFFFF ) {
+	if ( staticVars != (idCVar *)INTPTR_MAX ) {
 		this->next = staticVars;
 		staticVars = this;
 	} else {
@@ -298,11 +299,11 @@ ID_INLINE void idCVar::Init( const char *name, const char *value, int flags, con
 }
 
 ID_INLINE void idCVar::RegisterStaticVars( void ) {
-	if ( staticVars != (idCVar *)0xFFFFFFFF ) {
+	if ( staticVars != (idCVar *)INTPTR_MAX) {
 		for ( idCVar *cvar = staticVars; cvar; cvar = cvar->next ) {
 			cvarSystem->Register( cvar );
 		}
-		staticVars = (idCVar *)0xFFFFFFFF;
+		staticVars = (idCVar *)INTPTR_MAX;
 	}
 }
 

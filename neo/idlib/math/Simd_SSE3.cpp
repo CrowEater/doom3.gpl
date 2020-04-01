@@ -42,7 +42,7 @@ If you have questions concerning this license or the applicable additional terms
 //
 //===============================================================
 
-#if defined(MACOS_X) && defined(__i386__)
+#if defined(MACOS_X) && defined(__i386__) || defined(_WIN64)
 
 /*
 ============

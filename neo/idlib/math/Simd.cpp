@@ -141,7 +141,7 @@ idSIMDProcessor *p_simd;
 idSIMDProcessor *p_generic;
 long baseClocks = 0;
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(_WIN64)
 
 #define TIME_TYPE int
 

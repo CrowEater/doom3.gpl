@@ -38,7 +38,7 @@ If you have questions concerning this license or the applicable additional terms
 */
 
 class idSIMD_3DNow : public idSIMD_MMX {
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(_WIN64)
 public:
 	virtual const char * VPCALL GetName( void ) const;
 

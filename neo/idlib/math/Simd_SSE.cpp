@@ -41,7 +41,7 @@ If you have questions concerning this license or the applicable additional terms
 //===============================================================
 
 
-#if defined(MACOS_X) && defined(__i386__)
+#if defined(MACOS_X) && defined(__i386__) || defined(_WIN64)
 
 #include <xmmintrin.h>
 
@@ -93,7 +93,7 @@ void VPCALL idSIMD_SSE::Dot( float *dst, const idPlane &constant, const idDrawVe
 	char *dst_p = (char *) dst;                             // dst_p = ecx
 
 	assert( sizeof( idDrawVert ) == DRAWVERT_SIZE );
-	assert( (int)&((idDrawVert *)0)->xyz == DRAWVERT_XYZ_OFFSET );
+	assert( (intptr_t)&((idDrawVert *)0)->xyz == DRAWVERT_XYZ_OFFSET );
 	
 	/*
 		and			eax, ~3
@@ -256,7 +256,7 @@ idSIMD_SSE::MinMax
 void VPCALL idSIMD_SSE::MinMax( idVec3 &min, idVec3 &max, const idDrawVert *src, const int *indexes, const int count ) {
 
 	assert( sizeof( idDrawVert ) == DRAWVERT_SIZE );
-	assert( (int)&((idDrawVert *)0)->xyz == DRAWVERT_XYZ_OFFSET );
+	assert( (intptr_t)&((idDrawVert *)0)->xyz == DRAWVERT_XYZ_OFFSET );
 
 	__m128 xmm0, xmm1, xmm2, xmm3, xmm4, xmm5, xmm6, xmm7;
 	char *indexes_p;
@@ -452,6 +452,7 @@ idSIMD_SSE::Dot
   dst[i] = constant * src[i].Normal() + src[i][3];
 ============
 */
+#pragma runtime_checks( "", off )
 void VPCALL idSIMD_SSE::Dot( float *dst, const idVec3 &constant, const idPlane *src, const int count ) {
 	int count_l4;
 	int count_l1;
@@ -493,7 +494,7 @@ void VPCALL idSIMD_SSE::Dot( float *dst, const idVec3 &constant, const idPlane *
 	/*
 		jz			startVert1
 	*/
-	if (count != 0) {
+	if (count_l4 != 0) {
 	/*
 		imul		eax, 16
 		add			esi, eax
@@ -620,6 +621,7 @@ void VPCALL idSIMD_SSE::Dot( float *dst, const idVec3 &constant, const idPlane *
 	done:
 	*/
 }
+#pragma runtime_checks( "", restore )
 
 #elif defined(_WIN32)
 

@@ -131,7 +131,8 @@ int idBase64::Decode( byte *to ) const {
 			w = 0;
 		}
 	}
-	return n;
+	assert(n < INT_MAX);
+	return (int)n;
 }
 
 /*
